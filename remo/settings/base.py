@@ -71,7 +71,6 @@ MINIFY_BUNDLES = {
             ),
         'base_dashboard_mozillians': (
             'js/libs/stupidtable.js',
-            'js/libs/d3.v3.js',
             'js/remo/dashboard_mozillians.js'
             ),
         'voting_list_votings': (

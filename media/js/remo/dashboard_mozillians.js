@@ -56,17 +56,6 @@ $(document).ready(function () {
         $('.dashboard-mozillians-reps-reports-button').parent().siblings().removeClass('active');
     });
 
-    // Event attendance chart
-    // Todo: Change placeholder data to real data
-    var data = [4, 8, 15, 16, 23, 42];
-    var chart = d3.select("event-attendance-chart").append("div").attr("class", "chart");
-    chart.selectAll("div")
-            .data(data)
-        .enter().append("div")
-            .style("width", function(d) { return d * 10 + "px"; })
-            .text(function(d) { return d; });
-    alert("hello!");
-
     //Initiate datepicker
     DashboardLib.datepicker_elm.datepicker({
         onSelect: function(selectedDate) {
