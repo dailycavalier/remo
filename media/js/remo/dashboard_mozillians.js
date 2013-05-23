@@ -1,21 +1,3 @@
-var DashboardLib = {};
-DashboardLib.events_table_body_elm = $('#events-table-body');
-DashboardLib.period_selector_elm = $('#activities-period-selector');
-DashboardLib.category_selector_elm = $('#adv-search-categories');
-DashboardLib.dashboard_table_elm = $('#dashboard-table');
-DashboardLib.datepicker_start_elm = $('#date-start');
-DashboardLib.datepicker_end_elm = $('#date-end');
-DashboardLib.adv_search_elm = $('#adv-search');
-DashboardLib.adv_dashboard_icon_elm = $('#adv-search-icon-dashboard');
-DashboardLib.datepicker_elm = $('.datepicker');
-DashboardLib.window_elm = $(window);
-DashboardLib.location_elm = $(location);
-DashboardLib.trigger_timeout = undefined;
-DashboardLib.allset = false;
-DashboardLib.offset = 0;
-DashboardLib.window_offset = 450;
-DashboardLib.results_batch = 21;
-
 $(document).ready(function () {
     $('.dashboard-mozillians-reps-grid-button').click(function () {
         $('.dashboard-mozillians-reps-grid-block').removeClass('hidden');
@@ -23,29 +5,6 @@ $(document).ready(function () {
 
         $('.dashboard-mozillians-reps-grid-button').parent().addClass('active');
         $('.dashboard-mozillians-reps-grid-button').parent().siblings().removeClass('active');
-    });
-
-    // Activities time period click
-    $('#activities-month-button').click(function () {
-        $(this).parent().addClass('active');
-        $('#activities-month-button').parent().siblings().removeClass('active');
-    });
-    $('#activities-6months-button').click(function () {
-        $(this).parent().addClass('active');
-        $('#activities-6months-button').parent().siblings().removeClass('active');
-    });
-    $('#activities-future-button').click(function () {
-        $(this).parent().addClass('active');
-        $('#activities-future-button').parent().siblings().removeClass('active');
-    });
-    $('#activities-custom-button').click(function () {
-        $(this).parent().addClass('active');
-        $('#activities-custom-button').parent().siblings().removeClass('active');
-    });
-
-    // Advanced button click.
-    $('#adv-search-icon-dashboard').click(function() {
-        $('#adv-search').slideToggle();
     });
 
     $('.dashboard-mozillians-reps-reports-button').click(function () {
@@ -56,53 +15,22 @@ $(document).ready(function () {
         $('.dashboard-mozillians-reps-reports-button').parent().siblings().removeClass('active');
     });
 
-    //Initiate datepicker
-    DashboardLib.datepicker_elm.datepicker({
-        onSelect: function(selectedDate) {
-            var period = hash_get_value('period');
+    $('.dashboard-events-future-button').click(function () {
+        $('.dashboard-events-future-block').removeClass('hidden');
+        $('.dashboard-events-past-block').addClass('hidden');
 
-            if (period !== 'custom') {
-                hash_set_value('period', 'custom');
-            }
-
-            if (this.id == 'date-start') {
-                if (DashboardLib.datepicker_start_elm.val() === '') {
-                  hash_set_value('start', '');
-                }
-                else{
-                  hash_set_value('start', selectedDate);
-                }
-            }
-
-            if (this.id == 'date-end') {
-                if (DashboardLib.datepicker_end_elm.val() === '') {
-                  hash_set_value('end', '');
-                }
-                else{
-                  hash_set_value('end', selectedDate);
-                }
-            }
-
-            send_query(newquery=true);
-        },
-        dateFormat: 'yy-mm-dd'
+        $('.dashboard-events-future-button').parent().addClass('active');
+        $('.dashboard-events-future-button').parent().siblings().removeClass('active');
     });
 
-    DashboardLib.datepicker_elm.click(function(){
-        $(this).datepicker('show');
+    $('.dashboard-events-past-button').click(function () {
+        $('.dashboard-events-past-block').removeClass('hidden');
+        $('.dashboard-events-future-block').addClass('hidden');
+
+        $('.dashboard-events-past-button').parent().addClass('active');
+        $('.dashboard-events-past-button').parent().siblings().removeClass('active');
     });
 
-    var start_date = hash_get_value('start');
-    var end_date = hash_get_value('end');
-
-    if (start_date) {
-        DashboardLib.datepicker_start_elm.datepicker('setDate', start_date);
-    }
-    if (end_date) {
-        DashboardLib.datepicker_end_elm.datepicker('setDate', end_date);
-    }
-
-    // Events expander button click.
     $('.dashboard-events-expander-button').click(function () {
         // TODO Toggle the icon between > and V when clicked
         $('.dashboard-events-expander-button').toggle(function() {
