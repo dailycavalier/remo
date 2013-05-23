@@ -25,33 +25,15 @@
     </div>
   </div>
 {% else %}
-  <div id="people-filter" class="two columns">
-    <select id="people-filter-selector">
-      <!-- Todo: Filter to only show People, Reports
-            and Activities based on the people filter value -->
-      <!-- Todo: Style this filter using the custom dropdown -->
-      <option value="all">All</option>
-      <option value="mentees">My mentees</option>
-      <option value="mine">Mine</option>
-    </select>
-  </div>
-
   <dl class="tabs top-margined">
-      <!-- Selecting the All tab will display People and Activities from all interests -->
-      <dd>
-        <a href="#All" class="active">
-          All
-        </a>
-      </dd>
     {% for key, reps in tracked_interests|dictsort %}
       <dd>
-        <a href="#{{ key|replace(" ", "") }}">
-          {{ key }}
+        <a href="#{{ key|replace(" ", "") }}"
+           {% if loop.first %} class="active"{% endif %}>{{ key }}
         </a>
       </dd>
     {% endfor %}
   </dl>
-
   <ul class="tabs-content">
     {% for key, reps in tracked_interests|dictsort %}
       <li {% if loop.first %}class="active"{% endif %} id="{{ key|replace(" ", "") }}Tab">
@@ -59,7 +41,7 @@
       <div class="dashboard-box">
         <div class="row">
           <div class="seven columns">
-            <h4>People</h4>
+            <h5>People</h5>
           </div>  
         </div>
 
@@ -101,65 +83,13 @@
       <div class="dashboard-box">
         <div class="row">
           <div class="seven columns">
-            <h4>Activities</h4>
+            <h5>Reports</h5>
           </div>  
         </div>
 
-        <!-- Activities filters -->
         <div class="row">
-          <form class="custom twelve columns" id="dashboard-searchform">
-            <div class="five columns">
-              <select id="activities-period-selector">
-                <option value="all">All Events</option>
-                <option value="future">Current and Future</option>
-                <option value="past">Past</option>
-                <option value="custom">Custom</option>
-              </select>
-              <span id="adv-search-icon-dashboard" title="Advanced Options" class="pictogram-button one columns">
-                (
-              </span>
-            </div>
-          </form>
-        </div>
 
-        <!-- Advanced search box -->
-        <div class="row hidden" id="adv-search">
-          <div class="twelve columns">
-            <div class="row">
-              <form class="custom" id="searchform">
-                <div class="three columns">
-                  <input type="text" class="datepicker input-text big"
-                         id="date-start" placeholder="Start Range Date"/>
-                </div>
-                <div class="three columns">
-                  <input type="text" class="datepicker input-text big"
-                         id="date-end" placeholder="End Range Date"/>
-                </div>
-                <div class="three columns">
-                  <select id="adv-search-country" class="expand">
-                    <option value="">All Countries</option>
-                    <!-- Todo: Make list of countries available in this template -->
-                    <!-- Todo: When a country is selected, only show Reports and Events for that country -->
-                    {% for country in countries %}
-                      <option value="{{ country|lower }}">{{ country }}</option>
-                    {% endfor %}
-                  </select>
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>
-
-        <div class="dashboard-box">
-          <div class="row">
-            <div class="seven columns">
-              <h5>Reports</h5>
-            </div>  
-          </div>
-        </div>
-
-        <!-- reports list block -->
-        <div class="row">
+          <!-- reports list block -->
           <div class="dashboard-mozillians-reps-reports-block">
             {% if reps_reports[key] %}
               <table class="dashboard-table">
@@ -168,9 +98,9 @@
                     <th class="dashboard-clickable type-string">Name</th>
                     <th class="dashboard-clickable type-string">Last Report</th>
                     <th class="dashboard-clickable type-string">Reports Completed</th>
-                    <th class="dashboard-clickable type-string">Reports Completed <br /> during time period</th>
-                    <th class="dashboard-clickable type-string">Events Attended</th>
-                    <th class="dashboard-clickable type-string">Events Attended<br /> during time period</th>
+                    <th class="dashboard-clickable type-string">Reports Completed <br /> (previous 6 months)</th>
+                    <th class="dashboard-clickable type-string">Events</th>
+                    <th class="dashboard-clickable type-string">Events <br /> (previous 6 months)</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -187,27 +117,9 @@
                            {{ report.month.strftime('%B %Y') }}
                         </a>
                       </td>
-                      <td>
-                        <!-- Todo: Calculate report metrics for the Rep in this row: total reports, 
-                              total number of overdue reports, total number of empty reports  -->
-                        <span class="has-tip tip-right" title="22 reports (2 overdue, 1 empty)">93%</span>
-                        <!-- Todo:  Determine if the most recent report is empty. 
-                              If so, display flag icon. -->
-                        <!-- Todo: Show tool tip text as characters instead of pictograms  -->
-                        <span class="pictogram dashboard-report-icon has-tip tip-right" title="Empty report">{</span>
-                        <!-- Todo: Determine if the most recent report was filed late. 
-                              If so, display clock icon and include the date of report in a tool tip. -->
-                        <!-- Todo: Show the flag icon (&#246;), not the 'ö' character -->
-                        <!-- Todo: Show tool tip text as characters instead of pictograms  -->
-                        <span class="pictogram dashboard-report-icon has-tip tip-right" title="Filed April 8, 2013">&#246;</span>
-                      </td>
-                      <!-- Todo: Calculate recent report metrics for the Rep in this row based on the 
-                              selected time period: reports, number of overdue reports, number of empty reports  -->
+                      <td><span class="has-tip tip-right" title="22 reports (2 overdue, 1 empty)">93%</span></td>
                       <td><span class="has-tip tip-right" title="6 reports (0 overdue, 0 empty)">100%</span≥</td>
-                      <!-- Todo: Calculate number of contribute signups at all events that this Rep has attended -->
-                      <td><span class="has-tip tip-right" title="18 contribute signups">23</span></td>
-                      <!-- Todo: Calculate number of contribute signups at events that this Rep has
-                             attended during the selected time period -->
+                      <td>23</td>
                       <td><span class="has-tip tip-right" title="5 contribute signups">7</span></td>
                     </tr>
                   {% endfor %}
@@ -221,14 +133,29 @@
               </div>
             {% endif %}
           </div>
-        </div>
         <!-- end reports list block -->
+      </div>
 
       <!-- events block -->
       <div class="dashboard-box">
         <div class="row">
           <div class="seven columns">
-            <h5>Events</h5>
+            <h4>Events</h4>
+          </div>
+          <div class="five columns">
+            <dl class="sub-nav dashboard-filter">
+              <dt>Filter:</dt>
+                <dd class="active">
+                  <a class="dashboard-events-future-button" href="javascript:void(0)">
+                    Current & Future events
+                  </a>
+                </dd>
+                <dd>
+                  <a class="dashboard-events-past-button" href="javascript:void(0)">
+                    Past events
+                  </a>
+                </dd>
+            </dl>
           </div>
         </div>
 
@@ -236,16 +163,12 @@
         <div class="row">
           <div class="seven columns">
             <div class="dashboard-events-contributor-signups five columns">
-              <!-- Calculate the number of contributor signups during the selected people, time period and country -->
-              <h5>28 <small>contributor signups</small></h5>
+              <h4>28 <small>contributor signups</small></h4>
             </div>
             <div class="dashboard-events-attendees five columns">
-              <!-- Calculate the number of average attendees at events for the selected people, time period and country -->
-              <h5>63 <small>attendees on average 
-                <a href="#" data-reveal-id="event-attendance-modal" class="dashboard-clickable pictogram" title="View attendance chart">
-                  7
-                </a>
-              </small></h5>
+              <h4>63 <small>attendees on average 
+                <a href="#" data-reveal-id="event-attendance-modal" class="dashboard-clickable pictogram">7</a>
+              </small></h4>
             </div>
           </div>
         </div>
@@ -270,11 +193,7 @@
                   {% for event in reps_current_events[key] %}
                     <tr>
                       <td>
-                        <!-- Todo: If the event has budget or gear requests, show the expander button -->
-                        <!-- Todo: Swap the expander button pictogram (rotate the arrow) when clicked -->
-                        <span class="dashboard-clickable pictogram dashboard-events-expander-button" title="View event requests">
-                          &#62;
-                        </span>
+                        <span class="dashboard-clickable pictogram dashboard-events-expander-button">&#62;</span>
                         <a href="{{ url('events_view_event', slug=event.slug) }}">
                            {{ event.name }}
                         </a>
@@ -291,31 +210,28 @@
                       </td>
                       <td>{{ event.converted_visitors }}</td>
                     </tr>
-                    <!-- Todo: Check if an event has Budget or Swag requests. 
-                          If so, include that information below.  -->
-                    <tr class="dashboard-events-details-row hidden">
-                      <th></th>
-                      <th>Bug</th>
-                      <th>Summary</th>
-                      <th>Status</th>
-                      <th>Whiteboard</th>
-                    </tr>
-                    <tr class="dashboard-events-details-row hidden">
-                      <td></td>
-                      <td><a href="#">123456</a></td>
-                      <td>Budget request - Firefox OS hackathon</td>
-                      <td>ASSIGNED</td>                    
-                      <td>Approved</td>                   
-                    </tr>
-                    <tr class="dashboard-events-details-row hidden">
-                      <td></td>
-                      <td><a href="#">123457</a></td>
-                      <td>Swag request - Firefox OS hackathon</td>
-                      <td>ASSIGNED</td>                    
-                      <td>Order Shipped</td>                   
-                    </tr>
-
                   {% endfor %}
+                  <tr class="dashboard-events-details-row hidden">
+                    <th></th>
+                    <th>Bug</th>
+                    <th>Summary</th>
+                    <th>Status</th>
+                    <th>Whiteboard</th>
+                  </tr>
+                  <tr class="dashboard-events-details-row hidden">
+                    <td></td>
+                    <td><a href="#">123456</a></td>
+                    <td>Budget request - Firefox OS hackathon</td>
+                    <td>ASSIGNED</td>                    
+                    <td>Approved</td>                   
+                  </tr>
+                  <tr class="dashboard-events-details-row hidden">
+                    <td></td>
+                    <td><a href="#">123457</a></td>
+                    <td>Swag request - Firefox OS hackathon</td>
+                    <td>ASSIGNED</td>                    
+                    <td>Order Shipped</td>                   
+                  </tr>
                 </tbody>
               </table>
             {% else %}
